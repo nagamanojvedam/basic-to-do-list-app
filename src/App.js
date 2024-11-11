@@ -5,21 +5,25 @@ import { useState } from "react";
 //     id: 1,
 //     title: "Learn MongoDB",
 //     time: new Date().toLocaleTimeString(),
+//     isChecked: false,
 //   },
 //   {
 //     id: 2,
 //     title: "Learn Express JS",
 //     time: new Date().toLocaleTimeString(),
+//     isChecked: false,
 //   },
 //   {
 //     id: 3,
 //     title: "Learn React JS",
 //     time: new Date().toLocaleTimeString(),
+//     isChecked: false,
 //   },
 //   {
 //     id: 4,
 //     title: "Learn Node JS",
 //     time: new Date().toLocaleTimeString(),
+//     isChecked: false,
 //   },
 // ];
 
@@ -28,6 +32,7 @@ export default function App() {
   const [isHidden, setIsHidden] = useState(true);
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("incomplete");
+  const [sortBy, setSortBy] = useState("all");
 
   function clearForm() {
     setTitle("");
@@ -51,7 +56,7 @@ export default function App() {
       id: Date.now(),
       title,
       time: `${currDate.toLocaleTimeString()}, ${currDate.toLocaleDateString()}`,
-      isChecked: status === "incomplete",
+      isChecked: status !== "incomplete",
     };
 
     if (!title) return;
@@ -60,18 +65,43 @@ export default function App() {
     clearForm();
   }
 
+  function handleDeleteToDoItem(id) {
+    const newItems = items.filter((item) => item.id !== id);
+
+    setItems(newItems);
+  }
+
   function handleSetIsHidden(evnt) {
     evnt.preventDefault();
     setIsHidden((curr) => !curr);
     clearForm();
   }
 
+  function handleSetSortBy(evnt) {
+    setSortBy(evnt.target.value);
+  }
+
+  function handleChecked(id) {
+    const newItems = items.map((item) =>
+      item.id === id ? { ...item, isChecked: !item.isChecked } : item
+    );
+    setItems(newItems);
+  }
   return (
     <>
       <div className="app">
         <Header />
-        <Controls onClick={handleSetIsHidden} />
-        <List items={items} />
+        <Controls
+          sortBy={sortBy}
+          onClick={handleSetIsHidden}
+          handleSetSortBy={handleSetSortBy}
+        />
+        <List
+          items={items}
+          sortBy={sortBy}
+          handleChecked={handleChecked}
+          handleDeleteToDoItem={handleDeleteToDoItem}
+        />
       </div>
       <AddTodoForm
         isHidden={isHidden}
@@ -88,13 +118,11 @@ function Header() {
   return <header>ToDo List</header>;
 }
 
-function Controls({ onClick }) {
-  const [sortBy, setSortBy] = useState("all");
-
+function Controls({ sortBy, onClick, handleSetSortBy }) {
   return (
     <div className="controls">
       <button onClick={onClick}>Add Task</button>
-      <select value={sortBy} onChange={(evnt) => setSortBy(evnt.target.value)}>
+      <select value={sortBy} onChange={handleSetSortBy}>
         <option value="all">All</option>
         <option value="incomplete">Incomplete</option>
         <option value="completed">Completed</option>
@@ -134,33 +162,48 @@ function AddTodoForm({
   );
 }
 
-function List({ items }) {
+function List({ items, sortBy, handleChecked, handleDeleteToDoItem }) {
+  let sortedItems;
+
+  if (sortBy === "all") sortedItems = items;
+
+  if (sortBy === "incomplete")
+    sortedItems = items.slice().sort((a, b) => a.isChecked - b.isChecked);
+  if (sortBy === "completed")
+    sortedItems = items.slice().sort((a, b) => b.isChecked - a.isChecked);
+
   return (
     <ul className="todo-list">
-      {items.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <h3>No ToDo</h3>
       ) : (
-        items.map((item) => <ListItem item={item} key={item.id} />)
+        items.map((item) => (
+          <ListItem
+            item={item}
+            key={item.id}
+            onDelete={handleDeleteToDoItem}
+            handleChecked={handleChecked}
+          />
+        ))
       )}
     </ul>
   );
 }
 
-function ListItem({ item }) {
-  const [isChecked, setIsChecked] = useState(false);
+function ListItem({ item, handleChecked, onDelete }) {
   return (
     <li className="todo-list-item">
       <input
         type="checkbox"
-        checked={isChecked}
-        onChange={() => setIsChecked((curr) => !curr)}
+        checked={item.isChecked}
+        onChange={() => handleChecked(item.id)}
       />
       <div className="todo-info">
-        <h4 className={isChecked ? "strike" : ""}>{item.title}</h4>
+        <h4 className={item.isChecked ? "strike" : ""}>{item.title}</h4>
         <p>{item.time}</p>
       </div>
       <div className="todo-controls">
-        <button>🗑️</button>
+        <button onClick={() => onDelete(item.id)}>🗑️</button>
         <button>🖋️</button>
       </div>
     </li>
