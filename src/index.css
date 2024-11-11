@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto";
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+#root {
+  width: 60vw;
+}
+
+.app {
+  padding: 10px;
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+header {
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+}
+.controls button {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  background-color: rgb(85, 85, 214);
+}
+
+.controls select {
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(212, 212, 212);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(196, 196, 196, 0.8);
+}
+
+.add-todo-form {
+  gap: 10px;
+  background-color: rgb(225, 226, 240);
+  color: rgb(71, 71, 71);
+  border-radius: 10px;
+  padding: 20px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+.add-todo-form h3 {
+  margin-bottom: 10px;
+}
+.add-todo-form input,
+.add-todo-form select {
+  border: none;
+  padding: 15px 5px;
+  font-size: 1rem;
+}
+.add-todo-form-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-todo-form-controls button {
+  font-family: inherit;
+  color: inherit;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+#btn-add-task {
+  background-color: rgb(85, 85, 214);
+  color: white;
+}
+
+.todo-list {
+  background-color: rgb(240, 240, 240);
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.todo-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  padding: 10px 15px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.todo-list-item input[type="checkbox"] {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+}
+
+.todo-info {
+  width: 80%;
+  text-align: start;
+}
+
+.todo-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.todo-controls button {
+  font-size: 1rem;
+  border-radius: 5px;
+  padding: 5px;
+}
+input {
+  border: none;
+}
+
+input:focus {
+  outline: none;
+}
+button {
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.strike {
+  text-decoration: line-through;
+  color: grey;
+}
